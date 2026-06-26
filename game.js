@@ -87,6 +87,24 @@ if ('speechSynthesis' in window) {
   loadVoices();
 }
 
+// Cache Busting Version Control
+const CURRENT_VERSION = "1.0.1";
+function checkForUpdates() {
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return; // Don't check for updates when testing locally
+  }
+  fetch('version.json?t=' + Date.now())
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.version !== CURRENT_VERSION) {
+        console.log("New version detected:", data.version);
+        // Force browser to reload with the new version as query parameter
+        window.location.href = window.location.pathname + '?v=' + data.version;
+      }
+    })
+    .catch(err => console.warn("Update check failed:", err));
+}
+
 // Spawner Settings
 const dropY = 80;
 const warningLineY = 160;
@@ -547,7 +565,7 @@ function initPhysics() {
   engine.velocityIterations = 16;
   
   world = engine.world;
-  world.gravity.y = 1.25; // Increased gravity for faster, more responsive falling feel
+  world.gravity.y = 1.15; // Tuned gravity for balanced falling feel (reduced from 1.25)
   
   runner = Runner.create();
   
@@ -963,10 +981,12 @@ function triggerGameOver() {
   gameOverOverlay.classList.add("active");
   lastKingMergeTime = 0; // Reset so game over announcement isn't throttled
   speakMemeName("Game Over!", 3);
+  checkForUpdates(); // Check for updates in the background
 }
 
 function resetGame() {
   DEBUG_PRESPAWN = false; // Disable debug spawning on reset so player starts clean
+  checkForUpdates(); // Check for updates on reset
   
   const bodies = Composite.allBodies(world);
   bodies.forEach(body => {
