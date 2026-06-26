@@ -70,6 +70,23 @@ bestScoreEl.innerText = highScore;
 let DEBUG_PRESPAWN = false; // Set to true to start with larger characters for testing
 let lastKingMergeTime = 0;
 
+// Explicit male voice configuration for SpeechSynthesis
+let maleVoice = null;
+function loadVoices() {
+  if (!('speechSynthesis' in window)) return;
+  const voices = window.speechSynthesis.getVoices();
+  // Search for David, UK Male, or any name containing "male"
+  maleVoice = voices.find(v => 
+    v.name.toLowerCase().includes("male") ||
+    v.name.toLowerCase().includes("david") ||
+    v.name.toLowerCase().includes("google uk english male")
+  ) || voices.find(v => v.lang.startsWith("en"));
+}
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+
 // Spawner Settings
 const dropY = 80;
 const warningLineY = 160;
@@ -388,6 +405,9 @@ function speakMemeName(name, tier) {
     }
     
     const utterance = new SpeechSynthesisUtterance(name);
+    if (maleVoice) {
+      utterance.voice = maleVoice;
+    }
     
     if (tier === 0) {
       utterance.pitch = 2.0; utterance.rate = 1.7;
@@ -527,7 +547,7 @@ function initPhysics() {
   engine.velocityIterations = 16;
   
   world = engine.world;
-  world.gravity.y = 1.0;
+  world.gravity.y = 1.25; // Increased gravity for faster, more responsive falling feel
   
   runner = Runner.create();
   
@@ -582,6 +602,15 @@ function initPhysics() {
     });
   });
   
+function wakeAllBodies() {
+  const bodies = Composite.allBodies(world);
+  bodies.forEach(body => {
+    if (!body.isStatic) {
+      Matter.Sleeping.set(body, false);
+    }
+  });
+}
+
   Events.on(engine, 'afterUpdate', () => {
     while (mergesToProcess.length > 0) {
       const { bodyA, bodyB } = mergesToProcess.shift();
@@ -597,6 +626,9 @@ function initPhysics() {
       Composite.remove(world, bodyA);
       Composite.remove(world, bodyB);
       
+      // Explicitly wake up all other sleeping bodies so they fall and settle when their support is removed
+      wakeAllBodies();
+      
       const nextTierId = tier + 1;
       if (nextTierId < Tiers.length) {
         const nextTier = Tiers[nextTierId];
@@ -606,7 +638,7 @@ function initPhysics() {
           restitution: 0.05,
           friction: 0.35,
           frictionStatic: 0.6,
-          frictionAir: 0.03,
+          frictionAir: 0.015, // Reduced from 0.03 for slightly faster physics settle time
           slop: 0.1,
           // Scale density exponentially so larger characters are much heavier
           density: 0.001 * Math.pow(1.12, nextTierId),
@@ -691,7 +723,7 @@ function triggerDrop() {
     restitution: 0.05,
     friction: 0.35,
     frictionStatic: 0.6,
-    frictionAir: 0.03,
+    frictionAir: 0.015, // Reduced from 0.03 for faster, punchier falling speed
     slop: 0.1,
     // Scale density exponentially so larger characters are much heavier
     density: 0.001 * Math.pow(1.12, currentTier),
