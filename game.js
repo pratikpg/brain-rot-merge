@@ -900,11 +900,11 @@ function checkGameOver(dt) {
     ctx.fillStyle = "rgba(236, 72, 153, 0.95)";
     ctx.font = "bold 14px 'Space Grotesk', sans-serif";
     ctx.textAlign = "right";
-    const remaining = Math.max(0, (3000 - dangerTime) / 1000);
+    const remaining = Math.max(0, (7000 - dangerTime) / 1000);
     ctx.fillText(`DANGER: ${remaining.toFixed(1)}s`, canvas.width - 15, warningLineY - 12);
     ctx.restore();
     
-    if (dangerTime >= 3000) {
+    if (dangerTime >= 7000) {
       triggerGameOver();
     }
   } else {
