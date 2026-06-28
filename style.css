@@ -529,3 +529,80 @@ body.theme-football .final-stat .val {
   color: #eab308;
 }
 
+/* Footer & Compliance Subpages */
+.game-footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 15px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.game-footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 500;
+}
+
+.game-footer-links a:hover {
+  color: var(--text-primary);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.game-footer-links .sep {
+  opacity: 0.25;
+}
+
+/* Page Layout for Subpages */
+.page-layout {
+  max-width: 600px !important;
+}
+
+.content-panel {
+  width: 100%;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  max-height: min(600px, 72vh);
+  overflow-y: auto;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.content-panel h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin-top: 22px;
+  margin-bottom: 10px;
+  color: var(--neon-cyan);
+}
+
+body.theme-football .content-panel h2 {
+  color: #eab308;
+}
+
+.content-panel p {
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  margin-bottom: 14px;
+}
+
+.content-panel ul {
+  margin-left: 20px;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+}
+
+.content-panel li {
+  margin-bottom: 6px;
+}
+
+
