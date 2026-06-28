@@ -1,17 +1,31 @@
 // game.js - Brain Rot Merge Game Core Logic (Dynamic Outline Physics Edition)
 
 // 1. GAME DEFINITIONS AND TIER CONFIGURATIONS
-const Tiers = [
-  { id: 0, name: "Tralaleo", imgSrc: "assets/tralaleo.png", color: "#3b82f6", score: 2, size: 47 },     // 5% larger (45 -> 47)
-  { id: 1, name: "Larele", imgSrc: "assets/larele.png", color: "#22c55e", score: 4, size: 68 },       // 5% larger (65 -> 68)
-  { id: 2, name: "Capuchinna", imgSrc: "assets/capuchinna.png", color: "#ec4899", score: 8, size: 89 },   // 5% larger (85 -> 89)
-  { id: 3, name: "Sigma Boy", imgSrc: "assets/sigma_boy.png", color: "#f97316", score: 16, size: 116 },  // 5% larger (110 -> 116)
-  { id: 4, name: "Mewing Cat", imgSrc: "assets/mewing_cat.png", color: "#06b6d4", score: 32, size: 147 },  // 5% larger (140 -> 147)
-  { id: 5, name: "The Rizzler", imgSrc: "assets/the_rizzler.png", color: "#a855f7", score: 64, size: 184 },   // 5% larger (175 -> 184)
-  { id: 6, name: "Skibidi Blob", imgSrc: "assets/skibidi_blob.png", color: "#6b7280", score: 128, size: 226 }, // 5% larger (215 -> 226)
-  { id: 7, name: "Giga Chad", imgSrc: "assets/giga_chad_emoji.png", color: "#eab308", score: 256, size: 273 }, // 5% larger (260 -> 273)
-  { id: 8, name: "Meme King", imgSrc: "assets/brain_rot_king.png", color: "#ef4444", score: 512, size: 326 }    // 5% larger (310 -> 326)
+const MemeTiers = [
+  { id: 0, name: "Tralaleo", imgSrc: "assets/tralaleo.png", color: "#3b82f6", score: 2, size: 47, speechText: "Tralaleo", pitch: 2.0, rate: 1.7 },
+  { id: 1, name: "Larele", imgSrc: "assets/larele.png", color: "#22c55e", score: 4, size: 68, speechText: "Larele", pitch: 1.4, rate: 1.2 },
+  { id: 2, name: "Capuchinna", imgSrc: "assets/capuchinna.png", color: "#ec4899", score: 8, size: 89, speechText: "Capuchinna", pitch: 1.8, rate: 2.0 },
+  { id: 3, name: "Sigma Boy", imgSrc: "assets/sigma_boy.png", color: "#f97316", score: 16, size: 116, speechText: "Sigma Boy", pitch: 0.6, rate: 1.1 },
+  { id: 4, name: "Mewing Cat", imgSrc: "assets/mewing_cat.png", color: "#06b6d4", score: 32, size: 147, speechText: "shh Mewing", pitch: 1.2, rate: 1.0 },
+  { id: 5, name: "The Rizzler", imgSrc: "assets/the_rizzler.png", color: "#a855f7", score: 64, size: 184, speechText: "The Rizzler", pitch: 0.85, rate: 0.8 },
+  { id: 6, name: "Skibidi Blob", imgSrc: "assets/skibidi_blob.png", color: "#6b7280", score: 128, size: 226, speechText: "Skibidi toilet", pitch: 1.6, rate: 1.7 },
+  { id: 7, name: "Giga Chad", imgSrc: "assets/giga_chad_emoji.png", color: "#eab308", score: 256, size: 273, speechText: "Giga Chad", pitch: 0.35, rate: 0.9 },
+  { id: 8, name: "Meme King", imgSrc: "assets/brain_rot_king.png", color: "#ef4444", score: 512, size: 326, speechText: "Meme King! Wow!", pitch: 1.3, rate: 1.4 }
 ];
+
+const FootballTiers = [
+  { id: 0, name: "Lamine Schoolboy", imgSrc: "assets/yamal.png", color: "#ef4444", score: 2, size: 47, speechText: "Lamine Schoolboy!", pitch: 2.0, rate: 1.7 },
+  { id: 1, name: "Jude Tap-in-ham", imgSrc: "assets/bellingham.png", color: "#f8fafc", score: 4, size: 68, speechText: "Jude Tap in ham!", pitch: 1.4, rate: 1.2 },
+  { id: 2, name: "Ghost-land", imgSrc: "assets/haaland.png", color: "#3b82f6", score: 8, size: 89, speechText: "Ghost land!", pitch: 1.8, rate: 2.0 },
+  { id: 3, name: "Pay-bappé", imgSrc: "assets/mbappe.png", color: "#1e3a8a", score: 16, size: 116, speechText: "Pay bappé!", pitch: 0.6, rate: 1.1 },
+  { id: 4, name: "Injury Jr.", imgSrc: "assets/neymar.png", color: "#eab308", score: 32, size: 147, speechText: "Injury Junior!", pitch: 1.2, rate: 1.0 },
+  { id: 5, name: "De Cry-ne", imgSrc: "assets/debruyne.png", color: "#ef4444", score: 64, size: 184, speechText: "De Cry ne!", pitch: 0.85, rate: 0.8 },
+  { id: 6, name: "Selfishiano Penaldo", imgSrc: "assets/ronaldo.png", color: "#10b981", score: 128, size: 226, speechText: "Selfishiano Penaldo!", pitch: 1.6, rate: 1.7 },
+  { id: 7, name: "Ankara Pessi", imgSrc: "assets/messi.png", color: "#60a5fa", score: 256, size: 273, speechText: "Ankara Pessi!", pitch: 0.35, rate: 0.9 },
+  { id: 8, name: "Mickey Mouse Trophy", imgSrc: "assets/trophy.jpg", color: "#fbbf24", score: 512, size: 326, speechText: "Mickey Mouse Trophy!", pitch: 1.3, rate: 1.4 }
+];
+
+let Tiers = MemeTiers; // Reference to active tier configuration
 
 // Helper functions for logical dimensions (always square to prevent squeezing!)
 function getHalfWidth(tier) {
@@ -49,6 +63,12 @@ const gameOverCommentEl = document.getElementById("gameOverComment");
 const finalScoreEl = document.getElementById("finalScore");
 const finalBestEl = document.getElementById("finalBest");
 
+// Theme Selection UI Elements
+const themeMemeBtn = document.getElementById("themeMemeBtn");
+const themeFootballBtn = document.getElementById("themeFootballBtn");
+const startTitleEl = document.getElementById("startTitle");
+const startDescriptionEl = document.getElementById("startDescription");
+
 // Matter.js Aliases
 const Engine = Matter.Engine,
       World = Matter.World,
@@ -62,9 +82,13 @@ let engine;
 let world;
 let runner;
 let gameState = 'start';
+let currentTheme = localStorage.getItem("brainrot_theme") || "memes";
 let score = 0;
 let highScore = localStorage.getItem("brainrot_highscore") || 0;
 bestScoreEl.innerText = highScore;
+
+// Set correct tier pack based on currentTheme
+Tiers = currentTheme === "footballers" ? FootballTiers : MemeTiers;
 
 // Debug and Speech Synthesis throttle state
 let DEBUG_PRESPAWN = false; // Set to true to start with larger characters for testing
@@ -120,52 +144,58 @@ let dangerTime = 0;
 let isDangerActive = false;
 
 // Sprite loading and dynamic background extraction / boundary tracing
-const loadedImages = {};
-const transparentCanvases = {};
 let processedImagesCount = 0;
 let assetsLoaded = false;
 
-Tiers.forEach(tier => {
-  const img = new Image();
-  img.src = tier.imgSrc;
-  img.onload = () => {
-    // 1. Process white background to transparent using BFS flood fill
-    makeImageTransparent(img, (transCanvas) => {
-      transparentCanvases[tier.id] = transCanvas;
-      
-      // 2. Dynamically trace transparent boundary to calculate physical outline vertices
-      tier.vertices = extractVerticesFromImage(transCanvas, tier.size);
-      
-      // 3. Calculate mathematical centroid of vertices to correct image alignment offset
-      let sumX = 0, sumY = 0;
-      tier.vertices.forEach(v => {
-        sumX += v.x;
-        sumY += v.y;
-      });
-      tier.centroid = {
-        x: sumX / tier.vertices.length,
-        y: sumY / tier.vertices.length
-      };
+function preloadTiers(tierList) {
+  tierList.forEach(tier => {
+    const img = new Image();
+    img.src = tier.imgSrc;
+    img.onload = () => {
+      // 1. Process white background to transparent using BFS flood fill
+      makeImageTransparent(img, (transCanvas) => {
+        tier.transCanvas = transCanvas;
+        
+        // 2. Dynamically trace transparent boundary to calculate physical outline vertices
+        tier.vertices = extractVerticesFromImage(transCanvas, tier.size);
+        
+        // 3. Calculate mathematical centroid of vertices to correct image alignment offset
+        let sumX = 0, sumY = 0;
+        tier.vertices.forEach(v => {
+          sumX += v.x;
+          sumY += v.y;
+        });
+        tier.centroid = {
+          x: sumX / tier.vertices.length,
+          y: sumY / tier.vertices.length
+        };
 
+        processedImagesCount++;
+        checkAllAssetsLoaded();
+      });
+    };
+    img.onerror = () => {
+      console.warn(`Failed to load sprite for ${tier.name}`);
+      // Fallback circular vertices
+      tier.vertices = createCircularVertices(tier.size / 2);
+      tier.centroid = { x: 0, y: 0 };
       processedImagesCount++;
-      if (processedImagesCount === Tiers.length) {
-        assetsLoaded = true;
-        console.log("All character sprites loaded, transparency extracted, and physics outlines mapped.");
-      }
-    });
-  };
-  img.onerror = () => {
-    console.warn(`Failed to load sprite for ${tier.name}`);
-    // Fallback circular vertices
-    tier.vertices = createCircularVertices(tier.size / 2);
-    tier.centroid = { x: 0, y: 0 };
-    processedImagesCount++;
-    if (processedImagesCount === Tiers.length) {
-      assetsLoaded = true;
-    }
-  };
-  loadedImages[tier.id] = img;
-});
+      checkAllAssetsLoaded();
+    };
+  });
+}
+
+function checkAllAssetsLoaded() {
+  const totalImages = MemeTiers.length + FootballTiers.length;
+  if (processedImagesCount === totalImages) {
+    assetsLoaded = true;
+    console.log("All character sprites loaded, transparency extracted, and physics outlines mapped.");
+  }
+}
+
+// Start preloading both character sets immediately
+preloadTiers(MemeTiers);
+preloadTiers(FootballTiers);
 
 // Fallback vertices generator
 function createCircularVertices(radius) {
@@ -405,53 +435,41 @@ function playMergeSound(tier) {
   });
 }
 
-function speakMemeName(name, tier) {
+function speakMemeName(text, tierId) {
   if (isMuted) return;
   if (!('speechSynthesis' in window)) return;
   
-  // Prevent smaller merges from cutting off the Meme King speech instruction
-  if (Date.now() - lastKingMergeTime < 5000 && tier < 8) {
+  // Prevent smaller merges from cutting off the Meme King / Trophy speech instruction
+  if (Date.now() - lastKingMergeTime < 5000 && tierId < 8) {
     return;
   }
   
   try {
     window.speechSynthesis.cancel();
     
-    // For Meme King instructions, update the timestamp
-    if (name.includes("Brain Rot King formed")) {
+    // Determine dynamic announcement text if not a special instruction
+    let spokenText = text;
+    const tierObj = Tiers[tierId];
+    
+    if (text.includes("formed") || text.includes("Absolute")) {
+      // Keep special instruction texts as-is
+    } else if (tierObj) {
+      spokenText = tierObj.speechText || tierObj.name;
+    }
+    
+    // For Meme King / Trophy instructions, update the timestamp
+    if (text.includes("formed")) {
       lastKingMergeTime = Date.now();
     }
     
-    const utterance = new SpeechSynthesisUtterance(name);
+    const utterance = new SpeechSynthesisUtterance(spokenText);
     if (maleVoice) {
       utterance.voice = maleVoice;
     }
     
-    if (tier === 0) {
-      utterance.pitch = 2.0; utterance.rate = 1.7;
-    } else if (tier === 1) {
-      utterance.pitch = 1.4; utterance.rate = 1.2;
-    } else if (tier === 2) {
-      utterance.pitch = 1.8; utterance.rate = 2.0;
-    } else if (tier === 3) {
-      utterance.pitch = 0.6; utterance.rate = 1.1;
-    } else if (tier === 4) {
-      if (name === Tiers[4].name) utterance.text = "shh Mewing";
-      utterance.pitch = 1.2; utterance.rate = 1.0;
-    } else if (tier === 5) {
-      if (name === Tiers[5].name) utterance.text = "The Rizzler";
-      utterance.pitch = 0.85; utterance.rate = 0.8;
-    } else if (tier === 6) {
-      if (name === Tiers[6].name) utterance.text = "Skibidi toilet";
-      utterance.pitch = 1.6; utterance.rate = 1.7;
-    } else if (tier === 7) {
-      if (name === Tiers[7].name) utterance.text = "Giga Chad";
-      utterance.pitch = 0.35; utterance.rate = 0.9;
-    } else if (tier === 8) {
-      if (name === Tiers[8].name) {
-        utterance.text = "Meme King! Wow!";
-      }
-      utterance.pitch = 1.3; utterance.rate = 1.4;
+    if (tierObj) {
+      utterance.pitch = tierObj.pitch !== undefined ? tierObj.pitch : 1.0;
+      utterance.rate = tierObj.rate !== undefined ? tierObj.rate : 1.0;
     }
     
     window.speechSynthesis.speak(utterance);
@@ -681,17 +699,20 @@ function wakeAllBodies() {
         
         createExplosion(x, y, nextTier.color, size);
         triggerShake(14, 3 + nextTierId * 0.7);
-        
         if (nextTierId === 8) {
-          // Display floating banner instructions when Meme King is formed
-          floatingTexts.push(new FloatingText(x, y - 50, "👑 MEME KING FORMED! 👑", "#ef4444"));
-          speakMemeName("Brain Rot King formed! Merge two to clear the board!", 8);
+          const bannerText = currentTheme === 'footballers' ? "🏆 MICKEY MOUSE TROPHY FORMED! 🏆" : "👑 MEME KING FORMED! 👑";
+          floatingTexts.push(new FloatingText(x, y - 50, bannerText, "#ef4444"));
+          const speechText = currentTheme === 'footballers' 
+            ? "Mickey Mouse Trophy formed! Merge two to clear the board!" 
+            : "Brain Rot King formed! Merge two to clear the board!";
+          speakMemeName(speechText, 8);
         }
       } else {
-        // Ultimate merge: Two Meme Kings touch!
+        // Ultimate merge: Two Meme Kings / Trophies touch!
         addScore(2500, x, y, "#ffffff");
         playMergeSound(8);
-        speakMemeName("Brain Rot King Absolute!", 8);
+        const speechText = currentTheme === 'footballers' ? "Mickey Mouse Trophy Absolute!" : "Brain Rot King Absolute!";
+        speakMemeName(speechText, 8);
         createExplosion(x, y, "#ffffff", 140);
         triggerShake(28, 14);
       }
@@ -814,7 +835,7 @@ function drawMeme(body) {
   const tier = Tiers[body.tier];
   const x = body.position.x;
   const y = body.position.y;
-  const transCanvas = transparentCanvases[body.tier];
+  const transCanvas = tier.transCanvas;
   
   if (!body.vertices || body.vertices.length === 0) return;
   
@@ -856,7 +877,7 @@ function drawMeme(body) {
 // Draws preview shape at top
 function drawSpawner() {
   const tier = Tiers[currentTier];
-  const transCanvas = transparentCanvases[currentTier];
+  const transCanvas = tier.transCanvas;
   const hw = getHalfWidth(tier);
   const hh = getHalfHeight(tier);
   
@@ -1079,7 +1100,105 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-// 8. BUTTON CONTROLS INITIALIZATION
+// 8. BUTTON CONTROLS INITIALIZATION & THEME SELECTOR
+function updateLegendUI() {
+  const legendTitle = document.getElementById("legendTitle");
+  const legendDescription = document.getElementById("legendDescription");
+  const legendGrid = document.getElementById("legendGrid");
+  
+  if (!legendGrid) return;
+  
+  if (currentTheme === "footballers") {
+    if (legendTitle) legendTitle.innerText = "FOOTBALL TIER LIST";
+    if (legendDescription) legendDescription.innerText = "Merge identical players to evolve them to the World Cup Trophy:";
+  } else {
+    if (legendTitle) legendTitle.innerText = "MEME TIER LIST";
+    if (legendDescription) legendDescription.innerText = "Merge identical memes to evolve them up the food chain:";
+  }
+  
+  legendGrid.innerHTML = "";
+  Tiers.forEach((tier, index) => {
+    const item = document.createElement("div");
+    item.className = "legend-item";
+    
+    const img = document.createElement("img");
+    img.src = tier.imgSrc;
+    img.alt = tier.name;
+    
+    const name = document.createElement("span");
+    name.className = "legend-name";
+    name.innerText = tier.name;
+    
+    const val = document.createElement("span");
+    val.className = "legend-value";
+    val.innerText = `Tier ${index + 1}`;
+    
+    item.appendChild(img);
+    item.appendChild(name);
+    item.appendChild(val);
+    legendGrid.appendChild(item);
+  });
+}
+
+function selectTheme(theme) {
+  currentTheme = theme;
+  localStorage.setItem("brainrot_theme", theme);
+  
+  if (theme === "footballers") {
+    Tiers = FootballTiers;
+    if (themeFootballBtn) themeFootballBtn.classList.add("active");
+    if (themeMemeBtn) themeMemeBtn.classList.remove("active");
+    document.body.classList.add("theme-football");
+    document.body.classList.remove("theme-memes");
+    
+    if (startTitleEl) startTitleEl.innerText = "Football Merge";
+    if (startDescriptionEl) startDescriptionEl.innerText = "Drop players, let them bounce, and merge two matching stars to evolve them. Don't let the container overflow!";
+  } else {
+    Tiers = MemeTiers;
+    if (themeMemeBtn) themeMemeBtn.classList.add("active");
+    if (themeFootballBtn) themeFootballBtn.classList.remove("active");
+    document.body.classList.add("theme-memes");
+    document.body.classList.remove("theme-football");
+    
+    if (startTitleEl) startTitleEl.innerText = "Brain Rot Merge";
+    if (startDescriptionEl) startDescriptionEl.innerText = "Drop memes, let them bounce, and merge two matching characters to evolve them. Don't let the container overflow!";
+  }
+  
+  // Update header labels
+  const subHeader = document.querySelector(".title-section p");
+  const mainHeader = document.querySelector(".title-section h1");
+  if (theme === "footballers") {
+    if (mainHeader) mainHeader.innerText = "Football Merge";
+    if (subHeader) subHeader.innerText = "Evolve Football Stars!";
+  } else {
+    if (mainHeader) mainHeader.innerText = "Brain Rot Merge";
+    if (subHeader) subHeader.innerText = "Drop & Merge Memes!";
+  }
+  
+  updateLegendUI();
+  updateNextPreview();
+}
+
+function initTheme() {
+  selectTheme(currentTheme);
+}
+
+// Add Theme selector listeners
+if (themeMemeBtn) {
+  themeMemeBtn.addEventListener("click", () => {
+    if (gameState === "start") selectTheme("memes");
+  });
+}
+
+if (themeFootballBtn) {
+  themeFootballBtn.addEventListener("click", () => {
+    if (gameState === "start") selectTheme("footballers");
+  });
+}
+
+// Initialize theme state on page load
+initTheme();
+
 startBtn.addEventListener('click', () => {
   initAudio();
   initPhysics();
@@ -1101,7 +1220,8 @@ startBtn.addEventListener('click', () => {
   }
   
   playMergeSound(0);
-  speakMemeName("Let's cook!", 0);
+  const startSpeech = currentTheme === "footballers" ? "Kick off!" : "Let's cook!";
+  speakMemeName(startSpeech, 0);
 });
 
 restartBtn.addEventListener('click', () => {
@@ -1115,6 +1235,7 @@ restartOverlayBtn.addEventListener('click', () => {
 });
 
 legendBtn.addEventListener('click', () => {
+  updateLegendUI(); // Make sure it's updated
   legendOverlay.classList.add('active');
 });
 

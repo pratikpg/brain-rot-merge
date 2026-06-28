@@ -42,8 +42,25 @@
 
       <!-- 1. START OVERLAY -->
       <div class="overlay active" id="startOverlay">
-        <h2>Brain Rot Merge</h2>
-        <p>Drop memes, let them bounce, and merge two matching characters to evolve them. Don't let the container overflow!</p>
+        <h2 id="startTitle">Brain Rot Merge</h2>
+        <p id="startDescription">Drop memes, let them bounce, and merge two matching characters to evolve them. Don't let the container overflow!</p>
+        
+        <div class="theme-selection-title">CHOOSE YOUR PACK</div>
+        <div class="theme-selector-container">
+          <div class="theme-card active" id="themeMemeBtn">
+            <div class="theme-card-preview">
+              <img src="assets/tralaleo.png" alt="Meme Preview">
+            </div>
+            <div class="theme-card-name">Brain Rot Memes</div>
+          </div>
+          <div class="theme-card" id="themeFootballBtn">
+            <div class="theme-card-preview">
+              <img src="assets/yamal.png" alt="Footballer Preview">
+            </div>
+            <div class="theme-card-name">Football Stars</div>
+          </div>
+        </div>
+        
         <button class="action-btn" id="startBtn">PLAY GAME</button>
       </div>
 
@@ -66,55 +83,11 @@
 
       <!-- 3. LEGEND OVERLAY (TUTORIAL / TIER LIST) -->
       <div class="overlay legend-overlay" id="legendOverlay">
-        <h2>MEME TIER LIST</h2>
-        <p>Merge identical memes to evolve them up the food chain:</p>
+        <h2 id="legendTitle">MEME TIER LIST</h2>
+        <p id="legendDescription">Merge identical memes to evolve them up the food chain:</p>
         
-        <div class="legend-grid">
-          <div class="legend-item">
-            <img src="assets/tralaleo.png" alt="Tralaleo">
-            <span class="legend-name">Tralaleo</span>
-            <span class="legend-value">Tier 1</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/larele.png" alt="Larele">
-            <span class="legend-name">Larele</span>
-            <span class="legend-value">Tier 2</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/capuchinna.png" alt="Capuchinna">
-            <span class="legend-name">Capuchinna</span>
-            <span class="legend-value">Tier 3</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/sigma_boy.png" alt="Sigma Boy">
-            <span class="legend-name">Sigma Boy</span>
-            <span class="legend-value">Tier 4</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/mewing_cat.png" alt="Mewing Cat">
-            <span class="legend-name">Mewing Cat</span>
-            <span class="legend-value">Tier 5</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/the_rizzler.png" alt="The Rizzler">
-            <span class="legend-name">The Rizzler</span>
-            <span class="legend-value">Tier 6</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/skibidi_blob.png" alt="Skibidi Blob">
-            <span class="legend-name">Skibidi Blob</span>
-            <span class="legend-value">Tier 7</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/giga_chad_emoji.png" alt="Giga Chad">
-            <span class="legend-name">Giga Chad</span>
-            <span class="legend-value">Tier 8</span>
-          </div>
-          <div class="legend-item">
-            <img src="assets/brain_rot_king.png" alt="Meme King">
-            <span class="legend-name">Meme King</span>
-            <span class="legend-value">Tier 9</span>
-          </div>
+        <div class="legend-grid" id="legendGrid">
+          <!-- Populated dynamically via JS -->
         </div>
 
         <button class="action-btn" id="closeLegendBtn" style="padding: 8px 25px; font-size: 1rem;">CLOSE</button>

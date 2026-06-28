@@ -413,3 +413,139 @@ body {
     font-size: 1.1rem;
   }
 }
+
+/* Theme Selector UI in Start Overlay */
+.theme-selection-title {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-secondary);
+  margin-top: 15px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.theme-selector-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 320px;
+  justify-content: center;
+}
+
+.theme-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 2.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.theme-card.active {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.35);
+}
+
+.theme-card.active .theme-card-name {
+  color: #fff;
+}
+
+.theme-card-preview {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.theme-card-preview img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+.theme-card-name {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+/* Football Theme Styling Hooks */
+body.theme-football {
+  --bg-color: #04140a;
+  --panel-bg: rgba(6, 26, 14, 0.75);
+  --border-color-glow: rgba(34, 197, 94, 0.4);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(34, 197, 94, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(234, 179, 8, 0.12) 0%, transparent 40%);
+}
+
+body.theme-football .canvas-wrapper {
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.85);
+  background: rgba(3, 16, 8, 0.88);
+}
+
+body.theme-football .canvas-wrapper.danger {
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5), inset 0 0 40px rgba(239, 68, 68, 0.15);
+}
+
+body.theme-football .title-section h1 {
+  background: linear-gradient(to right, #4ade80, #eab308, #facc15);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
+}
+
+body.theme-football .theme-card.active {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: #22c55e;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.35);
+}
+
+body.theme-football .action-btn {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+
+body.theme-football .action-btn:hover {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
+}
+
+body.theme-football .control-btn:hover {
+  border-color: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+body.theme-football .legend-value {
+  color: #eab308;
+}
+
+body.theme-football .final-stat .val {
+  color: #eab308;
+}
+
