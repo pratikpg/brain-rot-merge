@@ -48,6 +48,9 @@ const canvasWrapper = document.getElementById("canvasWrapper");
 const currentScoreEl = document.getElementById("currentScore");
 const bestScoreEl = document.getElementById("bestScore");
 const nextPreviewImg = document.getElementById("nextPreviewImg");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const progressBar = document.getElementById("progressBar");
+const loadingStatus = document.getElementById("loadingStatus");
 const startOverlay = document.getElementById("startOverlay");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const legendOverlay = document.getElementById("legendOverlay");
@@ -177,9 +180,20 @@ function preloadTiers(tierList) {
 
 function checkAllAssetsLoaded() {
   const totalImages = MemeTiers.length + FootballTiers.length;
+  const progressPercent = Math.min(100, Math.floor((processedImagesCount / totalImages) * 100));
+  
+  if (progressBar) progressBar.style.width = `${progressPercent}%`;
+  if (loadingStatus) loadingStatus.innerText = `${progressPercent}%`;
+  
   if (processedImagesCount === totalImages) {
     assetsLoaded = true;
     console.log("All character sprites loaded, transparency extracted, and physics outlines mapped.");
+    
+    // Smooth transition from loading screen to start overlay
+    setTimeout(() => {
+      if (loadingOverlay) loadingOverlay.classList.remove('active');
+      if (startOverlay) startOverlay.classList.add('active');
+    }, 450);
   }
 }
 
