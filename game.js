@@ -68,6 +68,10 @@ const themeMemeBtn = document.getElementById("themeMemeBtn");
 const themeFootballBtn = document.getElementById("themeFootballBtn");
 const startTitleEl = document.getElementById("startTitle");
 const startDescriptionEl = document.getElementById("startDescription");
+const themeToggleBtn = document.getElementById("themeToggleBtn");
+const confirmOverlay = document.getElementById("confirmOverlay");
+const confirmYesBtn = document.getElementById("confirmYesBtn");
+const confirmNoBtn = document.getElementById("confirmNoBtn");
 
 // Matter.js Aliases
 const Engine = Matter.Engine,
@@ -1198,6 +1202,32 @@ if (themeFootballBtn) {
 
 // Initialize theme state on page load
 initTheme();
+
+// Theme switch button and confirmation overlay handlers
+themeToggleBtn.addEventListener('click', () => {
+  initAudio();
+  const nextTheme = currentTheme === 'footballers' ? 'memes' : 'footballers';
+  // Check if there are active gameplay bodies in the world
+  const hasActiveBodies = world && Composite.allBodies(world).some(b => !b.isStatic);
+  if (gameState === 'start' || (score === 0 && !hasActiveBodies)) {
+    selectTheme(nextTheme);
+  } else {
+    confirmOverlay.classList.add('active');
+  }
+});
+
+confirmNoBtn.addEventListener('click', () => {
+  initAudio();
+  confirmOverlay.classList.remove('active');
+});
+
+confirmYesBtn.addEventListener('click', () => {
+  initAudio();
+  const nextTheme = currentTheme === 'footballers' ? 'memes' : 'footballers';
+  selectTheme(nextTheme);
+  confirmOverlay.classList.remove('active');
+  resetGame();
+});
 
 startBtn.addEventListener('click', () => {
   initAudio();

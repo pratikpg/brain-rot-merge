@@ -87,6 +87,16 @@
         <button class="action-btn" id="closeLegendBtn" style="padding: 8px 25px; font-size: 1rem;">CLOSE</button>
       </div>
 
+      <!-- 4. THEME SWITCH CONFIRM OVERLAY -->
+      <div class="overlay confirm-overlay" id="confirmOverlay">
+        <h2>Switch Pack?</h2>
+        <p>Changing character packs will reset your current game score. Are you sure?</p>
+        <div class="confirm-buttons">
+          <button class="action-btn yes-btn" id="confirmYesBtn" style="padding: 8px 20px; font-size: 0.95rem;">Yes, Switch</button>
+          <button class="action-btn no-btn" id="confirmNoBtn" style="padding: 8px 20px; font-size: 0.95rem;">Cancel</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- CONTROLS & UTILITIES -->
@@ -94,6 +104,11 @@
       <button class="control-btn" id="legendBtn">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
         Tiers
+      </button>
+
+      <button class="control-btn" id="themeToggleBtn">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+        Pack
       </button>
 
       <button class="control-btn" id="muteBtn">
