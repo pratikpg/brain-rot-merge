@@ -40,21 +40,17 @@
     <div class="canvas-wrapper" id="canvasWrapper">
       <canvas id="gameCanvas"></canvas>
 
-      <!-- 0. LOADING OVERLAY -->
-      <div class="overlay active" id="loadingOverlay">
-        <h2 style="margin-bottom: 5px; font-size: 1.8rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SIMPLE GAMEZ</h2>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">Loading physics and images...</p>
-        <div class="progress-bar-container">
-          <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
-        </div>
-        <p id="loadingStatus" style="font-size: 0.78rem; opacity: 0.6; margin-top: 8px;">0%</p>
-      </div>
-
       <!-- 1. START OVERLAY -->
-      <div class="overlay" id="startOverlay">
+      <div class="overlay active" id="startOverlay">
         <h2 id="startTitle">Brain Rot Merge</h2>
         <p id="startDescription">Drop memes, let them bounce, and merge matching characters to evolve them. Don't let the container overflow!</p>
         
+        <!-- Progress Bar (loads assets in background) -->
+        <div class="progress-bar-container" id="progressBarContainer" style="margin-bottom: 20px; transition: all 0.4s ease;">
+          <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+        </div>
+        <p id="loadingStatus" style="font-size: 0.75rem; opacity: 0.6; margin-top: -15px; margin-bottom: 20px; transition: all 0.4s ease;">Loading assets: 0%</p>
+
         <div class="theme-selection-title">Select Pack</div>
         <div class="segmented-control">
           <button class="segment-btn active" id="themeMemeBtn">
@@ -65,7 +61,7 @@
           </button>
         </div>
         
-        <button class="action-btn" id="startBtn">PLAY GAME</button>
+        <button class="action-btn disabled" id="startBtn" disabled>LOADING (0%)</button>
       </div>
 
       <!-- 2. GAME OVER OVERLAY -->

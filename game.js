@@ -48,7 +48,7 @@ const canvasWrapper = document.getElementById("canvasWrapper");
 const currentScoreEl = document.getElementById("currentScore");
 const bestScoreEl = document.getElementById("bestScore");
 const nextPreviewImg = document.getElementById("nextPreviewImg");
-const loadingOverlay = document.getElementById("loadingOverlay");
+const progressBarContainer = document.getElementById("progressBarContainer");
 const progressBar = document.getElementById("progressBar");
 const loadingStatus = document.getElementById("loadingStatus");
 const startOverlay = document.getElementById("startOverlay");
@@ -183,16 +183,25 @@ function checkAllAssetsLoaded() {
   const progressPercent = Math.min(100, Math.floor((processedImagesCount / totalImages) * 100));
   
   if (progressBar) progressBar.style.width = `${progressPercent}%`;
-  if (loadingStatus) loadingStatus.innerText = `${progressPercent}%`;
+  if (loadingStatus) loadingStatus.innerText = `Loading assets: ${progressPercent}%`;
+  
+  if (startBtn && !assetsLoaded) {
+    startBtn.innerText = `LOADING (${progressPercent}%)`;
+  }
   
   if (processedImagesCount === totalImages) {
     assetsLoaded = true;
     console.log("All character sprites loaded, transparency extracted, and physics outlines mapped.");
     
-    // Smooth transition from loading screen to start overlay
+    // Enable play button and hide progress bar elements
     setTimeout(() => {
-      if (loadingOverlay) loadingOverlay.classList.remove('active');
-      if (startOverlay) startOverlay.classList.add('active');
+      if (startBtn) {
+        startBtn.innerText = "PLAY GAME";
+        startBtn.classList.remove("disabled");
+        startBtn.removeAttribute("disabled");
+      }
+      if (progressBarContainer) progressBarContainer.classList.add('hidden');
+      if (loadingStatus) loadingStatus.classList.add('hidden');
     }, 450);
   }
 }
