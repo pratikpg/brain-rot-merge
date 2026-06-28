@@ -98,22 +98,8 @@ Tiers = currentTheme === "footballers" ? FootballTiers : MemeTiers;
 let DEBUG_PRESPAWN = false; // Set to true to start with larger characters for testing
 let lastKingMergeTime = 0;
 
-// Explicit male voice configuration for SpeechSynthesis
-let maleVoice = null;
-function loadVoices() {
-  if (!('speechSynthesis' in window)) return;
-  const voices = window.speechSynthesis.getVoices();
-  // Search for David, UK Male, or any name containing "male"
-  maleVoice = voices.find(v => 
-    v.name.toLowerCase().includes("male") ||
-    v.name.toLowerCase().includes("david") ||
-    v.name.toLowerCase().includes("google uk english male")
-  ) || voices.find(v => v.lang.startsWith("en"));
-}
-if ('speechSynthesis' in window) {
-  window.speechSynthesis.onvoiceschanged = loadVoices;
-  loadVoices();
-}
+// Local Audio voice track (plays local MP3 assets)
+let activeVoiceAudio = null;
 
 // Cache Busting Version Control
 const CURRENT_VERSION = "1.0.1";
@@ -441,7 +427,6 @@ function playMergeSound(tier) {
 
 function speakMemeName(text, tierId) {
   if (isMuted) return;
-  if (!('speechSynthesis' in window)) return;
   
   // Prevent smaller merges from cutting off the Meme King / Trophy speech instruction
   if (Date.now() - lastKingMergeTime < 5000 && tierId < 8) {
@@ -449,36 +434,36 @@ function speakMemeName(text, tierId) {
   }
   
   try {
-    window.speechSynthesis.cancel();
-    
-    // Determine dynamic announcement text if not a special instruction
-    let spokenText = text;
-    const tierObj = Tiers[tierId];
-    
-    if (text.includes("formed") || text.includes("Absolute")) {
-      // Keep special instruction texts as-is
-    } else if (tierObj) {
-      spokenText = tierObj.speechText || tierObj.name;
+    // Cancel currently playing voice if there is one
+    if (activeVoiceAudio) {
+      activeVoiceAudio.pause();
+      activeVoiceAudio.currentTime = 0;
     }
     
-    // For Meme King / Trophy instructions, update the timestamp
-    if (text.includes("formed")) {
-      lastKingMergeTime = Date.now();
+    let soundFile = "";
+    
+    if (text === "Game Over!") {
+      soundFile = "assets/sounds/game_over.mp3";
+    } else if (text === "Kick off!" || text === "Let's cook!") {
+      soundFile = currentTheme === "footballers" ? "assets/sounds/start_football.mp3" : "assets/sounds/start_memes.mp3";
+    } else {
+      // It's a character merge
+      const prefix = currentTheme === "footballers" ? "football_tier" : "meme_tier";
+      soundFile = `assets/sounds/${prefix}${tierId}.mp3`;
+      
+      // Update king merge timestamp for the ultimate tiers
+      if (tierId === 8) {
+        lastKingMergeTime = Date.now();
+      }
     }
     
-    const utterance = new SpeechSynthesisUtterance(spokenText);
-    if (maleVoice) {
-      utterance.voice = maleVoice;
-    }
-    
-    if (tierObj) {
-      utterance.pitch = tierObj.pitch !== undefined ? tierObj.pitch : 1.0;
-      utterance.rate = tierObj.rate !== undefined ? tierObj.rate : 1.0;
-    }
-    
-    window.speechSynthesis.speak(utterance);
+    // Play the audio file
+    activeVoiceAudio = new Audio(soundFile);
+    activeVoiceAudio.play().catch(err => {
+      console.warn("Failed to play voice file:", soundFile, err);
+    });
   } catch (err) {
-    console.error("SpeechSynthesis error:", err);
+    console.error("Error playing voice audio:", err);
   }
 }
 
