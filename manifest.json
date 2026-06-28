@@ -1,0 +1,24 @@
+{
+  "name": "Simple Gamez",
+  "short_name": "Simple Gamez",
+  "description": "Play high-quality instant merge games on Simple Gamez.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080610",
+  "theme_color": "#080610",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

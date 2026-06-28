@@ -1237,9 +1237,44 @@ confirmYesBtn.addEventListener('click', () => {
   resetGame();
 });
 
+// PWA Local Notifications Scheduler
+function scheduleIntervalNotification() {
+  if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  
+  navigator.serviceWorker.ready.then(registration => {
+    console.log("Scheduling PWA notification...");
+    // Schedule a test welcome notification in 5 seconds
+    setTimeout(() => {
+      registration.showNotification('Simple Gamez 🎮', {
+        body: currentTheme === 'footballers' 
+          ? "Kickoff time! Ready to merge some football stars?" 
+          : "Tralaleo! Let's cook some brain rot merges!",
+        icon: './assets/icon-192.png',
+        badge: './assets/icon-192.png',
+        vibrate: [200, 100, 200],
+        tag: 'simple-gamez-welcome'
+      });
+    }, 5000);
+  });
+}
+
 startBtn.addEventListener('click', () => {
   initAudio();
   initPhysics();
+  
+  // Request Notification permission and schedule welcome notification
+  if ('Notification' in window) {
+    if (Notification.permission === 'default') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          scheduleIntervalNotification();
+        }
+      });
+    } else if (Notification.permission === 'granted') {
+      scheduleIntervalNotification();
+    }
+  }
   
   Runner.run(runner, engine);
   

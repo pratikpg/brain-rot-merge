@@ -6,9 +6,21 @@
   <title>Brain Rot Merge — Play the Ultimate Meme Physics Game</title>
   <meta name="description" content="Drop, bounce, and merge your favorite brain rot characters in this juicy physics puzzle game! Can you merge all the way to the Brain Rot King?">
   <link rel="stylesheet" href="style.css?v=1.0.1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#080610">
 
   <!-- GOOGLE ADSENSE CODE PLACEHOLDER --> 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1994649833559646" crossorigin="anonymous"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body>
 
