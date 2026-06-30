@@ -3,59 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About & Contact - Simple Gamez</title>
-  <link rel="stylesheet" href="style.css?v=1.0.1">
-
-  <!-- GOOGLE ADSENSE CODE PLACEHOLDER --> 
+  <title>About & Contact — Simple Gamez</title>
+  <meta name="description" content="Learn more about Simple Gamez, the technologies behind our instant browser games, and how to get in touch with us.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#080610">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- GOOGLE ADSENSE CODE PLACEHOLDER -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1994649833559646" crossorigin="anonymous"></script>
 </head>
 <body>
-
-  <div class="game-container page-layout">
-    
+  <div class="stars-bg"></div>
+  <div class="portal-container">
     <!-- HEADER -->
-    <header class="game-header">
-      <div class="title-section">
-        <h1>Simple Gamez</h1>
-        <p>About & Contact</p>
+    <header class="portal-header">
+      <div class="logo-area">
+        <span class="logo-icon">🎮</span>
+        <span class="logo-text">SIMPLE<span class="highlight">GAMEZ</span></span>
       </div>
-      <a href="index.html" class="control-btn" style="text-decoration: none;">
-        <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:currentColor; vertical-align:middle; margin-right:4px;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-        Back to Game
-      </a>
+      <nav class="portal-nav">
+        <a href="index.html" class="nav-link">Games</a>
+        <a href="about.html" class="nav-link active">About</a>
+      </nav>
     </header>
 
-    <!-- CONTENT PANEL -->
-    <div class="content-panel">
-      <h2>About Simple Gamez</h2>
-      <p>Simple Gamez is a web gaming portal dedicated to hosting high-quality, instant-play, browser-based games. Our mission is to provide clean, fun, and engaging casual games that load instantly and run smoothly on any device without requiring downloads, installs, or logins.</p>
+    <!-- MAIN CONTENT -->
+    <main class="content-section">
+      <h1>About & Contact</h1>
       
-      <p>Our current flagship game is a physics-based merge puzzle game featuring two custom-tailored theme packs:</p>
-      <ul>
-        <li><strong>Brain Rot Merge:</strong> Drop and evolve iconic memes in a chaotic, bouncy physics box!</li>
-        <li><strong>Football Merge:</strong> Progress through your favorite football stars, starting from rising talents like Lamine Yamal, all the way to the ultimate Mickey Mouse Trophy!</li>
-      </ul>
+      <div class="content-card">
+        <h2>About Simple Gamez</h2>
+        <p>Simple Gamez is a web gaming portal dedicated to hosting high-quality, instant-play, browser-based games. Our mission is to provide clean, fun, and engaging casual games that load instantly and run smoothly on any device without requiring downloads, installs, or logins.</p>
+        
+        <p>Our current featured games include:</p>
+        <ul>
+          <li><strong>Brain Rot Merge:</strong> Drop and evolve iconic memes in a chaotic, bouncy physics box!</li>
+          <li><strong>Raising Comet:</strong> Guide your comet through deep space, collect stardust, and dodge incoming obstacles.</li>
+        </ul>
 
-      <h2>Technology Behind the Games</h2>
-      <p>Our games are built from the ground up using modern client-side web technologies, including:</p>
-      <ul>
-        <li><strong>Matter.js:</strong> An advanced 2D physics engine used to simulate realistic rigid body collisions, friction, and bounce.</li>
-        <li><strong>HTML5 Canvas:</strong> Rendered dynamically using highly optimized 2D context drawing operations for smooth frame rates.</li>
-        <li><strong>Responsive Design:</strong> Tailored using custom CSS grid and flexbox, ensuring perfect pixel aspect ratios on both wide desktop screens and tall mobile devices.</li>
-      </ul>
+        <h2>Technology Behind the Games</h2>
+        <p>Our games are built from the ground up using modern client-side web technologies and game engines, including:</p>
+        <ul>
+          <li><strong>Godot Engine:</strong> A powerful open-source game engine used to build 2D and 3D games, exported to HTML5 WebAssembly (WASM) for native-like performance in the browser.</li>
+          <li><strong>Matter.js:</strong> An advanced 2D physics engine used to simulate realistic rigid body collisions, friction, and bounce for our JavaScript games.</li>
+          <li><strong>HTML5 Canvas:</strong> Rendered dynamically using highly optimized drawing operations for smooth frame rates.</li>
+        </ul>
 
-      <h2>Contact Us</h2>
-      <p>We value feedback from our players! If you have any suggestions, bug reports, feature requests, or business inquiries, feel free to reach out to us:</p>
-      
-      <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 15px 20px; border-radius: 12px; margin-top: 15px; margin-bottom: 15px;">
-        <p style="margin-bottom: 5px; font-weight: bold; color: var(--neon-cyan);">📧 Email Support:</p>
-        <p style="font-size: 1.1rem; margin-bottom: 0;"><a href="mailto:simpleusefulapps@gmail.com" style="color: #fff; text-decoration: none;">simpleusefulapps@gmail.com</a></p>
+        <h2>Contact Us</h2>
+        <p>We value feedback from our players! If you have any suggestions, bug reports, feature requests, or business inquiries, feel free to reach out to us:</p>
+        
+        <div class="contact-box">
+          <p class="contact-title">📧 Email Support</p>
+          <p class="contact-email"><a href="mailto:simpleusefulapps@gmail.com">simpleusefulapps@gmail.com</a></p>
+        </div>
+
+        <p>We do our best to reply to all user inquiries within 24 to 48 hours. Thank you for playing and supporting Simple Gamez!</p>
       </div>
+    </main>
 
-      <p>We do our best to reply to all user inquiries within 24 to 48 hours. Thank you for playing and supporting Simple Gamez!</p>
-    </div>
-
+    <!-- FOOTER -->
+    <footer class="portal-footer">
+      <div class="footer-bottom">
+        <p>&copy; 2026 Simple Gamez. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="about.html">About & Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
   </div>
-
 </body>
 </html>

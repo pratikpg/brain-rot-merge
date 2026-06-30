@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Rot Merge — Play the Ultimate Meme Physics Game</title>
+  <meta name="description" content="Drop, bounce, and merge your favorite brain rot characters in this juicy physics puzzle game! Can you merge all the way to the Brain Rot King?">
+  <link rel="stylesheet" href="style.css?v=1.0.1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#080610">
+
+  <!-- GOOGLE ADSENSE CODE PLACEHOLDER --> 
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1994649833559646" crossorigin="anonymous"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</head>
+<body>
+
+  <div class="game-container">
+    <a href="../../index.html" class="back-to-portal">
+      <svg viewBox="0 0 24 24" width="16" height="16" style="vertical-align: middle; fill: currentColor; margin-right: 4px;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      Back to Games
+    </a>
+    <!-- HEADER SECTION -->
+    <header class="game-header">
+      <div class="title-section">
+        <h1>Brain Rot Merge</h1>
+        <p>Drop & Merge Memes!</p>
+      </div>
+      
+      <div class="stats-section">
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <span id="currentScore" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Best</span>
+          <span id="bestScore" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Next</span>
+          <div class="next-box">
+            <img id="nextPreviewImg" src="assets/tralaleo.png" alt="Next character preview">
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- GAME CANVAS AND OVERLAYS -->
+    <div class="canvas-wrapper" id="canvasWrapper">
+      <canvas id="gameCanvas"></canvas>
+
+      <!-- 1. START OVERLAY -->
+      <div class="overlay active" id="startOverlay">
+        <h2 id="startTitle">Brain Rot Merge</h2>
+        <p id="startDescription">Drop memes, let them bounce, and merge matching characters to evolve them. Don't let the container overflow!</p>
+        
+        <!-- Progress Bar (loads assets in background) -->
+        <div class="progress-bar-container" id="progressBarContainer" style="margin-bottom: 20px; transition: all 0.4s ease;">
+          <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+        </div>
+        <p id="loadingStatus" style="font-size: 0.75rem; opacity: 0.6; margin-top: -15px; margin-bottom: 20px; transition: all 0.4s ease;">Loading assets: 0%</p>
+
+        <div class="theme-selection-title">Select Pack</div>
+        <div class="segmented-control">
+          <button class="segment-btn active" id="themeMemeBtn">
+            <span class="segment-icon">🤪</span> Memes
+          </button>
+          <button class="segment-btn" id="themeFootballBtn">
+            <span class="segment-icon">⚽</span> Football
+          </button>
+        </div>
+        
+        <button class="action-btn disabled" id="startBtn" disabled>LOADING (0%)</button>
+      </div>
+
+      <!-- 2. GAME OVER OVERLAY -->
+      <div class="overlay" id="gameOverOverlay">
+        <h2>GAME OVER</h2>
+        <p class="game-over-comment" id="gameOverComment">You overflowed! Skill issue.</p>
+        <div class="final-stats">
+          <div class="final-stat">
+            <span class="val" id="finalScore">0</span>
+            <span class="lbl">Your Score</span>
+          </div>
+          <div class="final-stat">
+            <span class="val" id="finalBest">0</span>
+            <span class="lbl">Personal Best</span>
+          </div>
+        </div>
+        <button class="action-btn" id="restartOverlayBtn">TRY AGAIN</button>
+      </div>
+
+      <!-- 3. LEGEND OVERLAY (TUTORIAL / TIER LIST) -->
+      <div class="overlay legend-overlay" id="legendOverlay">
+        <h2 id="legendTitle">MEME TIER LIST</h2>
+        <p id="legendDescription">Merge identical memes to evolve them up the food chain:</p>
+        
+        <div class="legend-grid" id="legendGrid">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <button class="action-btn" id="closeLegendBtn" style="padding: 8px 25px; font-size: 1rem;">CLOSE</button>
+      </div>
+
+      <!-- 4. THEME SWITCH CONFIRM OVERLAY -->
+      <div class="overlay confirm-overlay" id="confirmOverlay">
+        <h2>Switch Pack?</h2>
+        <p>Changing character packs will reset your current game score. Are you sure?</p>
+        <div class="confirm-buttons">
+          <button class="action-btn yes-btn" id="confirmYesBtn" style="padding: 8px 20px; font-size: 0.95rem;">Yes, Switch</button>
+          <button class="action-btn no-btn" id="confirmNoBtn" style="padding: 8px 20px; font-size: 0.95rem;">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CONTROLS & UTILITIES -->
+    <div class="controls-panel">
+      <button class="control-btn" id="legendBtn">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        Tiers
+      </button>
+
+      <button class="control-btn" id="themeToggleBtn">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+        Pack
+      </button>
+
+      <button class="control-btn" id="muteBtn">
+        <svg id="muteIcon" viewBox="0 0 24 24">
+          <!-- Speaker icon (unmuted by default) -->
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+        <span id="muteText">Mute</span>
+      </button>
+
+      <button class="control-btn" id="restartBtn">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <!-- FOOTER LINKS -->
+    <footer class="game-footer-links">
+      <a href="about.html">About & Contact</a>
+      <span class="sep">|</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="terms.html">Terms of Service</a>
+    </footer>
+
+  </div>
+
+  <!-- IMPORT POLY-DECOMP FOR CUSTOM SHAPES -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/poly-decomp.js/0.3.0/poly-decomp.min.js"></script>
+  <!-- IMPORT MATTER.JS CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <!-- CORE GAME LOGIC -->
+  <script src="game.js?v=1.0.1"></script>
+</body>
+</html>

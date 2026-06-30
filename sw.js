@@ -1,33 +1,16 @@
-const CACHE_NAME = 'simple-gamez-v1.0.2';
+const CACHE_NAME = 'simple-gamez-v1.1.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './style.css',
-  './game.js',
   './manifest.json',
+  './assets/brain_rot_merge_thumb.jpg',
+  './assets/raising_comet_thumb.jpg',
+  './assets/icon.png',
   './assets/icon-192.png',
-  './assets/icon-512.png',
-  // Meme sprites
-  './assets/tralaleo.png',
-  './assets/larele.png',
-  './assets/capuchinna.png',
-  './assets/sigma_boy.png',
-  './assets/mewing_cat.png',
-  './assets/the_rizzler.png',
-  './assets/skibidi_blob.png',
-  './assets/giga_chad_emoji.png',
-  './assets/brain_rot_king.png',
-  // Football sprites
-  './assets/yamal.png',
-  './assets/bellingham.png',
-  './assets/haaland.png',
-  './assets/mbappe.png',
-  './assets/neymar.png',
-  './assets/debruyne.png',
-  './assets/ronaldo.png',
-  './assets/messi.png',
-  './assets/trophy.jpg'
+  './assets/icon-512.png'
 ];
+
 
 // Install Event
 self.addEventListener('install', event => {
