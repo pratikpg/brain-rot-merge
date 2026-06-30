@@ -1,4 +1,4 @@
-const CACHE_NAME = 'simple-gamez-v1.1.0';
+const CACHE_NAME = 'simple-gamez-v1.2.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './assets/brain_rot_merge_thumb.jpg',
   './assets/raising_comet_thumb.jpg',
+  './assets/shift_surf_thumb.jpg',
   './assets/icon.png',
   './assets/icon-192.png',
   './assets/icon-512.png'
