@@ -10,9 +10,27 @@
   <meta name="theme-color" content="#080610">
   <script>
     if ('serviceWorker' in navigator) {
+      // Auto-reload the page when the new Service Worker takes control
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+          refreshing = true;
+          window.location.reload();
+        }
+      });
+
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .then(reg => {
+            console.log('Service Worker registered:', reg.scope);
+            // Check for updates immediately on page load
+            reg.update();
+            
+            // Periodically check for service worker updates (every 5 minutes)
+            setInterval(() => {
+              reg.update();
+            }, 1000 * 60 * 5);
+          })
           .catch(err => console.error('Service Worker registration failed:', err));
       });
     }
