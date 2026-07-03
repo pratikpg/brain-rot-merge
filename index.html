@@ -52,6 +52,7 @@
       </div>
       <nav class="portal-nav">
         <a href="#games" class="nav-link active">Games</a>
+        <button id="pwa-install-nav-btn" class="nav-install-btn hidden">Install App</button>
         <a href="about.html" class="nav-link">About</a>
       </nav>
     </header>
@@ -138,18 +139,23 @@
     </footer>
   </div>
 
-  <!-- PWA INSTALL BANNER -->
-  <div id="pwa-install-banner" class="hidden">
-    <div class="pwa-install-content">
-      <img src="assets/icon-192.png" alt="Simple Gamez Icon" class="pwa-install-icon">
-      <div class="pwa-install-text">
-        <h4>Install Simple Gamez</h4>
-        <p>Play offline and in fullscreen mode!</p>
+  <!-- PWA INSTRUCTION MODAL (iOS / Other manual installs) -->
+  <div id="pwa-instruction-modal" class="pwa-modal-overlay">
+    <div class="pwa-modal-content">
+      <img src="assets/icon-192.png" alt="Simple Gamez Icon" class="pwa-modal-icon">
+      <h3>Install Simple Gamez</h3>
+      <p>Install the app on your device to play offline and in fullscreen mode!</p>
+      <div class="pwa-step-box">
+        <div class="pwa-step">
+          <span class="pwa-step-num">1</span>
+          <span>Tap the <strong>Share</strong> button <svg class="ios-share-icon" viewBox="0 0 24 24" width="16" height="16"><path fill="#007aff" d="M16 5l-1.42 1.42L13 5.83V16h-2V5.83L9.42 7.42 8 6l4-4 4 4zm4 5v11H4V10h3v2H6v7h12v-7h-1v-2h3z"/></svg> in Safari.</span>
+        </div>
+        <div class="pwa-step">
+          <span class="pwa-step-num">2</span>
+          <span>Scroll down and select <strong>"Add to Home Screen"</strong>.</span>
+        </div>
       </div>
-      <div class="pwa-install-actions">
-        <button id="pwa-btn-install" class="pwa-btn primary">Install</button>
-        <button id="pwa-btn-close" class="pwa-btn secondary">Not Now</button>
-      </div>
+      <button id="pwa-modal-close-btn" class="pwa-modal-btn">Got It</button>
     </div>
   </div>
 
@@ -179,84 +185,68 @@
 
     // 2. PWA Install Logic
     let deferredPrompt;
-    const installBanner = document.getElementById('pwa-install-banner');
-    const btnInstall = document.getElementById('pwa-btn-install');
-    const btnClose = document.getElementById('pwa-btn-close');
+    const installBtn = document.getElementById('pwa-install-nav-btn');
+    const instructionModal = document.getElementById('pwa-instruction-modal');
+    const modalCloseBtn = document.getElementById('pwa-modal-close-btn');
 
+    // Check if the app is already installed/running in standalone/fullscreen mode
     const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || 
                            window.matchMedia('(display-mode: fullscreen)').matches ||
                            window.navigator.standalone === true;
 
     if (!isAppInstalled) {
+      // Chrome / Android / Windows
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        if (sessionStorage.getItem('pwa-prompt-dismissed') !== 'true') {
-          showInstallBanner();
+        if (installBtn) {
+          installBtn.classList.remove('hidden');
         }
       });
 
+      // iOS Safari detection
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       
-      if (isIOS && isSafari && sessionStorage.getItem('pwa-prompt-dismissed') !== 'true') {
-        setTimeout(() => {
-          setupIOSInstallBanner();
-        }, 3000);
+      if (isIOS && isSafari) {
+        if (installBtn) {
+          installBtn.classList.remove('hidden');
+        }
       }
     }
 
-    function showInstallBanner() {
-      if (installBanner) {
-        installBanner.classList.add('show');
-      }
-    }
-
-    function hideInstallBanner() {
-      if (installBanner) {
-        installBanner.classList.remove('show');
-      }
-    }
-
-    if (btnInstall) {
-      btnInstall.addEventListener('click', () => {
+    // Handle install button click
+    if (installBtn) {
+      installBtn.addEventListener('click', () => {
         if (deferredPrompt) {
           deferredPrompt.prompt();
           deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
-              console.log('User accepted PWA installation');
-            } else {
-              console.log('User dismissed PWA installation');
+              console.log('User installed PWA');
+              installBtn.classList.add('hidden');
             }
             deferredPrompt = null;
-            hideInstallBanner();
           });
         } else {
-          hideInstallBanner();
+          // Show the iOS/other manual instruction modal
+          if (instructionModal) {
+            instructionModal.classList.add('show');
+          }
         }
       });
     }
 
-    if (btnClose) {
-      btnClose.addEventListener('click', () => {
-        hideInstallBanner();
-        sessionStorage.setItem('pwa-prompt-dismissed', 'true');
+    // Close manual instruction modal
+    if (modalCloseBtn && instructionModal) {
+      modalCloseBtn.addEventListener('click', () => {
+        instructionModal.classList.remove('show');
       });
-    }
-
-    function setupIOSInstallBanner() {
-      const bannerText = document.querySelector('.pwa-install-text p');
-      const bannerTitle = document.querySelector('.pwa-install-text h4');
       
-      if (bannerText && bannerTitle) {
-        bannerTitle.textContent = "Install Web App";
-        bannerText.innerHTML = "Tap the Share button and select <strong>'Add to Home Screen'</strong>.";
-        
-        if (btnInstall) {
-          btnInstall.textContent = "Got It";
+      instructionModal.addEventListener('click', (e) => {
+        if (e.target === instructionModal) {
+          instructionModal.classList.remove('show');
         }
-        showInstallBanner();
-      }
+      });
     }
   </script>
 </body>
