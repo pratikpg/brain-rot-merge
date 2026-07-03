@@ -1,4 +1,4 @@
-const CACHE_NAME = 'simple-gamez-v1.5.0';
+const CACHE_NAME = 'simple-gamez-v1.6.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -39,8 +39,30 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch Event (Cache First, fallback to Network)
+// Fetch Event (Network First for manifest and HTML files, Cache First for other static assets)
 self.addEventListener('fetch', event => {
+  const isManifest = event.request.url.includes('manifest.json');
+  const isNavigation = event.request.mode === 'navigate';
+
+  if (isManifest || isNavigation) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          // Cache the fresh response before returning it
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        })
+        .catch(() => {
+          // If network fails, serve from the offline cache
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
+
+  // Cache First strategy for images, scripts, styling, icons, and audio
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
       if (cachedResponse) {
