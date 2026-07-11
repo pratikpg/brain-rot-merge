@@ -1,4 +1,4 @@
-const CACHE_NAME = 'simple-gamez-v1.11.0';
+const CACHE_NAME = 'simple-gamez-v1.12.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
